@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /thanh-toan.html
+Disallow: /cam-on.html
+Disallow: /tra-cuu.html
+Disallow: /gio-hang.html
+Disallow: /yeu-thich.html
+
+Sitemap: https://hankeyboard.io.vn/sitemap.xml
