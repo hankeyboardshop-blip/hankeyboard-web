@@ -1,0 +1,30 @@
+name: Verify HANKeyboard API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/verify-api.yml"
+      - "assets/js/config.js"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public API health
+        env:
+          API_URL: https://script.google.com/macros/s/AKfycbzRKq1Gbb15bdmXTjBJYHgd8qyF_wU4pEeNs0r-VhCgkINVaOCPnYplNlGT-MabKPHh/exec
+        run: |
+          set -euo pipefail
+          response="$(curl -fsSL --retry 2 --max-time 40 "$API_URL?action=health")"
+          RESPONSE="$response" node - <<'NODE'
+          const health = JSON.parse(process.env.RESPONSE);
+          if (health.ok !== true || health.service !== "HANKeyboard API") {
+            throw new Error("HANKeyboard API health endpoint is not ready");
+          }
+          console.log("HANKeyboard API health check passed.");
+          NODE
